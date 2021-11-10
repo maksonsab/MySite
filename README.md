@@ -1,3 +1,5 @@
 # MySite
 
-Hello World!
+My site! 
+
+I'm using Flask, SQLite3.

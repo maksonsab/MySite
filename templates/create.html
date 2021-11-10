@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %} Добавить новость {% endblock %} 
+
+{%  block content %}
+
+    <center>
+        <h1 style="margin-top:200px">Добавить новость:</h1>
+        <form method="post">
+            <div>
+            <label for="title">Название статьи </label><input type="text" name="title" placeholder="Название" value="{{ request.form['title'] }}" required><br>
+            <div style="height: 5px;"></div>
+            <label for="art_description">Описание статьи </label><input type="text" name="art_description" placeholder="Описание" value="{{ request.form['art_description'] }}" required><br>
+            </div>
+            <div style="margin:5px">
+                <textarea type="text" name="content" id="content" placeholder="Содержание статьи, поддерживается markdown..." value="{{ request.form['content'] }}" required cols="120" rows="20"></textarea>
+            </div>
+            <div>
+                <button type="submit">Отправить</button>
+            </div>
+
+        </form>
+</center>
+
+
+
+{% endblock %}

@@ -1,0 +1,60 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #fdebd6;
+    font-family: roboto;
+}
+
+
+.info-block {
+
+    padding-top: 30vh;
+    width: 30vh;
+    height: 70vh;
+
+}
+
+
+.social-links {
+    
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+}
+
+
+.articles {
+
+display: flex;
+justify-content: space-between;
+width: 90%;
+align-items: center;
+
+}
+
+.artc {
+
+    display: block;
+    width: 25%;
+    background-color: blanchedalmond;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    padding: 10px;
+    border-radius: 10px;
+
+}
+
+.artc, h2 {
+    text-align: center;
+}
+
+
+.allart{
+    margin: 50px;
+}
+
+#allart, a {
+    color: black;
+    margin-top: 10px;
+
+}

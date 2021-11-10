@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css')}}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@316;415&family=Roboto&display=swap" rel="stylesheet">
+    
+    <title>Максим Сабирзанов</title>
+</head>
+<body>
+    <center>
+
+        <div class="info-block">
+            <img src="/static/graphics/logo.png" alt="logo" style="width: 100%;">
+            <h1>Максим Сабирзанов</h1>
+            <div class="social-links">
+                <a href="https://twitter.com/maksonsab" target="blank"><img src="static/graphics/twitter.svg" alt="twitter" width="40px"></a>
+                <a href="https://instagram.com/maksonsab" target="blank"><img src="static/graphics/instagram.svg" alt="instagram" width="40px"></a>
+                <a href="https://vk.com/maksonsab" target="blank"><img src="static/graphics/vk.svg" alt="vk" width="40px"></a>
+                <a href="https://github.com/maksonsab" target="blank"><img src="static/graphics/github.svg" alt="github" width="40px"></a>
+
+
+            </div>
+        </div>
+
+
+    </center>
+    <center>
+        <div class="articles">
+           
+            
+            {% for article in data %}
+            
+            
+          
+            <div class="artc">
+                {{art}}
+                <h3><a href={{ 'articles/' + article['id']|string }}>{{article['title']}}</a></h3>
+                <p>{{article['art_description']}}</p>
+            </div>
+            {% endfor %}
+
+        </div>
+        <div class="allart"><a href="/articles" id="allart">Все статьи</a></div>
+    </center>
+</body>
+</html>
