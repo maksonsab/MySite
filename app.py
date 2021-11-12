@@ -45,13 +45,10 @@ def index():
 @app.route('/articles/<id>', methods=['GET'])
 def article(id = None):
     conn = get_db_connection()
-    data = conn.execute(f'SELECT * FROM articles WHERE id={id}').fetchall()
-    article = []
-    for d in data:
-        d = dict(d)
-        d['content'] = markdown(d['content'])
-        article.append(d)
-    return render_template('article.html', data = article)
+    data = conn.execute(f'SELECT * FROM articles WHERE id={id}').fetchall() #return list, inside <class 'sqlite3.Row'> with article data (len = 1)
+    data = dict(data[0]) #<class 'sqlite3.Row'> to dict
+    data['content'] = markdown(data['content'])
+    return render_template('article.html', data = data)
 
 @app.route('/articles/', methods=['GET'])
 def articles():

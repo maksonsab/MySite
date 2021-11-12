@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css')}}">
+{% extends 'base.html' %}
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@316;415&family=Roboto&display=swap" rel="stylesheet">
-    
-    <title>Статьи</title>
-</head>
-<body>
+{% block title %} Текст {% endblock %} 
+
+{%  block content %}
     <center>
         <div style="height: 100px; text-align: center; font-size: 30px;" >
             <a href="/">Домой</a>
@@ -26,5 +17,4 @@
        {% endfor %}
     </center>
 
-</body>
-</html>
+{% endblock %}
