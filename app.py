@@ -58,17 +58,20 @@ def articles():
     return render_template('articles.html', data = data)
  
 @app.route('/create', methods=['GET', 'POST'])
-def create():
-    conn = get_db_connection()
-    if request.method == 'POST':
-        article = request.form
-        conn.execute('INSERT INTO articles (title, art_description, content) VALUES (?,?,?)', (article['title'], article['art_description'], article['content']))
-        conn.commit()
-        conn.close()
-        return redirect('/')
-    return render_template('create.html')
+def create(status = False):
+    if status:
+        conn = get_db_connection()
+        if request.method == 'GET':
+            return render_template('create.html')
+        if request.method == 'POST':
+            article = request.form
+            conn.execute('INSERT INTO articles (title, art_description, content) VALUES (?,?,?)', (article['title'], article['art_description'], article['content']))
+            conn.commit()
+            conn.close()
+            return redirect('/')
+    return redirect('/')
 
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host = '0.0.0.0', )
