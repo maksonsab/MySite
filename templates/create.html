@@ -10,7 +10,7 @@
             <div>
             <label for="title">Название статьи </label><input type="text" name="title" placeholder="Название" value="{{ request.form['title'] }}" required><br>
             <div style="height: 5px;"></div>
-            <label for="art_description">Описание статьи </label><input type="text" name="art_description" placeholder="Описание" value="{{ request.form['art_description'] }}" required><br>
+            <label for="art_description">Описание статьи </label><input type="text" name="post_description" placeholder="Описание" value="{{ request.form['art_description'] }}" required><br>
             </div>
             <div style="margin:5px">
                 <textarea type="text" name="content" id="content" placeholder="Содержание статьи, поддерживается markdown..." value="{{ request.form['content'] }}" required cols="120" rows="20"></textarea>

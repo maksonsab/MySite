@@ -24,19 +24,19 @@
         <div class="articles">
            
             
-            {% for article in data %}
+            {% for post in data %}
             
             
           
             <div class="artc">
                 {{art}}
-                <h3><a href={{ 'articles/' + article['id']|string }}>{{article['title']}}</a></h3>
-                <p>{{article['art_description']}}</p>
+                <h3><a href={{ 'post/' + post['id']|string }}>{{post['title']}}</a></h3>
+                <p>{{post['post_description']}}</p>
             </div>
             {% endfor %}
 
         </div>
-        <div class="allart"><a href="/articles" id="allart">Все статьи</a></div>
+        <div class="allart"><a href="/posts" id="allart">Все статьи</a></div>
     </center>
     
 {% endblock %}

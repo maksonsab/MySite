@@ -7,14 +7,17 @@
         <div style="height: 100px; text-align: center; font-size: 30px;" >
             <a href="/">Домой</a>
         </div>
-        {% for article in data %}
+        {% for post in data %}
        <div class="artc" style="margin: 20px;">
 
-            <h2><a href= {{ article['id']|string }}> {{article['title'] }}</a></h2>
-            <p>{{ article['art_description'] }}</p>
+            <h2><a href= {{ url_for('post', id=post['id'])  }}> {{post['title'] }}</a></h2>
+            <p>{{ post['post_description'] }}</p>
         
        </div>
        {% endfor %}
     </center>
 
 {% endblock %}
+
+
+'/post/' + post['id']|string 
