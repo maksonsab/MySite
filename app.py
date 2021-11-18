@@ -14,22 +14,15 @@ app.config.update(
     DEBUG = True,
     SECRET_KEY = environ['SECRET_KEY'],
     ENV = 'development',
-    creating = False
+    creating = True
 )
-
-
-def get_db_connection(): 
-    '''Возвращает подключение к БД sqlite3'''
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    return conn
+db = 'database.db'
 
 
 @app.route('/', methods=['GET'])
 def index():
 
-    conn = get_db_connection()
-    dbase = db_operation(conn)
+    dbase = db_operation(db)
     data = dbase.get_last_posts()
     
     return render_template('index.html', data = data)
@@ -37,8 +30,8 @@ def index():
 
 @app.route('/post/<int:id>', methods=['GET'])
 def post(id = None):
-    conn = get_db_connection()
-    dbase = db_operation(conn)
+
+    dbase = db_operation(db)
     data = dbase.get_post(id)
     data['content'] = markdown(data['content'])
 
@@ -46,8 +39,8 @@ def post(id = None):
 
 @app.route('/posts/', methods=['GET'])
 def posts():
-    conn = get_db_connection()
-    dbase = db_operation(conn)
+
+    dbase = db_operation(db)
     data = dbase.get_posts()
 
     return render_template('posts.html', data = data)
@@ -58,9 +51,8 @@ def create(status = app.config.get('creating')):
         if request.method == 'GET':
             return render_template('create.html')
         if request.method == 'POST':
-            conn = get_db_connection()
             post = request.form
-            dbase = db_operation(conn)
+            dbase = db_operation(db)
             print(post)
             dbase.create_post(post)
             return redirect(url_for('index'))
