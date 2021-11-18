@@ -56,7 +56,7 @@ def create(status = app.config.get('creating')):
             print(post)
             dbase.create_post(post)
             return redirect(url_for('index'))
-    return redirect('/')
+    return redirect(url_for('index'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login(status = app.config.get('creating')):
