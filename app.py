@@ -19,13 +19,45 @@ app.config.update(
     ENV = 'development',
 )
 
-def dbase():
+def dbase(): #return database connection
     return db_operation('database.db')
 
 def bad_cookie() -> response: #cleaning cookies 
     response = make_response(redirect(url_for('login')), 302)
     response.set_cookie('username', '', max_age=0)
+    session.clear()
     return response
+
+@app.before_request
+def is_loggined(cookies=None) -> bool:
+    print('before first req')
+    session_bool = session.get('loggined')
+    if session_bool == True:
+        #return 'session_bool = True'
+        pass
+
+    user = request.cookies.get('username')
+    if user:
+        #print ('not user', f'var user contains: {user}') #False
+        
+        try:
+            username, sign = user.split('.')
+        except ValueError:
+            print('value error')  #False
+        correct_cookie = check_user_from_cookie(username, sign)
+        if correct_cookie[0]: 
+            print('Cookies OK!')
+            session['username'] = correct_cookie[1]
+            session['loggined'] = True
+            session.modified = True
+        #return False
+
+
+
+
+
+
+
 
 @app.route('/', methods=['GET'])
 def index():
@@ -47,7 +79,7 @@ def create():
         try:
             username, sign = request.cookies.get('username').split('.')
             print(username, sign)
-            if auth.check_user_from_cookie(username, sign):
+            if auth.check_user_from_cookie(username, sign)[0]:
                 return render_template('create.html')
             else:
                 print('badcookie'.title())
@@ -74,12 +106,14 @@ def login():
             except ValueError:
                 return bad_cookie()
             correct_cookie = check_user_from_cookie(username, sign)
-            if correct_cookie: 
-                response = make_response(redirect(url_for('create')), 302)
+            if correct_cookie[0]: 
+                response = make_response(redirect(url_for('create')), 302) #login OK
+                session['username'] = correct_cookie[1] 
+                print(session)
                 return response
             else:
                 return bad_cookie()
-                
+        print(session)        
         response = make_response(render_template('login.html'), 200)
         return response
     if request.method == 'POST':
@@ -91,7 +125,10 @@ def login():
         if message[0]:
             response = make_response((redirect(url_for('create')), 302))
             response.set_cookie('username', auth.sign_data(login), max_age = 1*24*3600)
-            print(message[1])
+            #print(message[1])
+            session['username'] = login
+            session['loggined'] = True
+            session.modified = True
             return response
         else:
             return bad_cookie()
@@ -99,6 +136,16 @@ def login():
 @app.route('/logout', methods = ['GET'])
 def logout():
     return bad_cookie()
+
+
+@app.route('/test', methods = ['GET'])
+def test():
+    print('COOKIES:\n', request.cookies)
+    loggined = session.get('loggined')
+    if loggined:
+        string = session
+        return string
+    return 'Not loggined'
 
 
 

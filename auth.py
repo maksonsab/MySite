@@ -24,5 +24,5 @@ def hash_password(password: str) -> str:
 def check_user_from_cookie(login: str, sign: str) -> bool:
     login_from_cookie = base64.b64decode(login.encode()).decode()
     sign_generated = create_sign(login_from_cookie)
-    print(sign, sign_generated, sign==sign_generated)
-    return sign == sign_generated
+    #print(sign, sign_generated, sign==sign_generated)
+    return sign == sign_generated, login_from_cookie
