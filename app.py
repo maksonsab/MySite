@@ -17,20 +17,19 @@ app.config.update(
     DEBUG = True,
     SECRET_KEY = environ['SECRET_KEY'],
     ENV = 'development',
-    creating = True
 )
 
-'dbase = '
 def dbase():
     return db_operation('database.db')
 
 def bad_cookie() -> response: #cleaning cookies 
     response = make_response(redirect(url_for('login')), 302)
-    response.set_cookie('username', '')
+    response.set_cookie('username', '', max_age=0)
     return response
 
 @app.route('/', methods=['GET'])
 def index():
+    print()
     return render_template('index.html',  data = dbase().get_last_posts())
 
 
@@ -43,7 +42,7 @@ def posts():
     return render_template('posts.html', data = dbase().get_posts())
 
 @app.route('/create', methods=['GET', 'POST'])
-def create(status = app.config.get('creating')):    
+def create():    
     if request.method == 'GET':
         try:
             username, sign = request.cookies.get('username').split('.')
@@ -65,40 +64,41 @@ def create(status = app.config.get('creating')):
         return redirect(url_for('index'))
 
 @app.route('/login', methods=['GET', 'POST'])
-def login(status = app.config.get('creating')):
-    if status:
-        if request.method == 'GET':
-            user = request.cookies.get('username')
-            if user:
-                try:
-                    username, sign = user.split('.')
-                except ValueError:
-                    return bad_cookie()
-                correct_cookie = check_user_from_cookie(username, sign)
-                if correct_cookie: 
-                    response = make_response(redirect(url_for('create')), 302)
-                    return response
-                else:
-                    return bad_cookie()
-                
-            response = make_response(render_template('login.html'), 200)
-            return response
-        else:
-            pass
-        if request.method == 'POST':
-            
-            login = request.form['login']
-            password = request.form['password']
-            
-            message = dbase().authorize(login, password)
-            if message[0]:
-                response = make_response((redirect(url_for('create')), 302))
-                response.set_cookie('username', auth.sign_data(login))
-                print(message[1])
+def login():
+
+    if request.method == 'GET':
+        user = request.cookies.get('username')
+        if user:
+            try:
+                username, sign = user.split('.')
+            except ValueError:
+                return bad_cookie()
+            correct_cookie = check_user_from_cookie(username, sign)
+            if correct_cookie: 
+                response = make_response(redirect(url_for('create')), 302)
                 return response
             else:
                 return bad_cookie()
                 
+        response = make_response(render_template('login.html'), 200)
+        return response
+    if request.method == 'POST':
+            
+        login = request.form['login']
+        password = request.form['password']
+            
+        message = dbase().authorize(login, password)
+        if message[0]:
+            response = make_response((redirect(url_for('create')), 302))
+            response.set_cookie('username', auth.sign_data(login), max_age = 1*24*3600)
+            print(message[1])
+            return response
+        else:
+            return bad_cookie()
+                
+@app.route('/logout', methods = ['GET'])
+def logout():
+    return bad_cookie()
 
 
 

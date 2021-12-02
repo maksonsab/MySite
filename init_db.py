@@ -1,10 +1,18 @@
+from time import sleep
 import sqlite3
 from auth import hash_password
 
 connection = sqlite3.connect('database.db')
 
-with open('schema.sql') as f:
-    connection.executescript(f.read())
+try:
+    with open('schema.sql') as f:
+        connection.executescript(f.read())
+except FileNotFoundError:
+    print('File schema.sql not found\nExiting... ')
+    sleep(5)
+    exit()
+else:
+    print('Creating database!')
 
 cur = connection.cursor()
 

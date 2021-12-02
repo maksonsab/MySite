@@ -47,7 +47,8 @@ class db_operation(object):
         self.__connection.close()
         print('db connection closed!')
 
-    def authorize(self, login: str, password: str) -> bool:
+    def authorize(self, login: str, password: str) -> tuple:
+        '''Возвращает кортеж с bool-ключем авторизации и сообщением для вывода в консоль (отладка)'''
         command = f'SELECT * FROM users WHERE username="{login}"'
         get_user = self.__cur.execute(command).fetchone()
         self.__connection.close()
