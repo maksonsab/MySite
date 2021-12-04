@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %} Максим Сабирзанов {% endblock %} 
-
+{% set header = False %}
+{% set main_page = True %}
+{% if loggined['loggined'] %}
+    {% set header = True %}
+{% endif %}
 {%  block content %}
     <center>
 

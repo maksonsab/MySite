@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %} Добавить пост {% endblock %} 
-
+{% set header = True %}
 {%  block content %}
 
     <center>
-        <h1 style="margin-top:200px">Добавить новость:</h1>
+        <h1 style="margin-top:100px">Добавить новость:</h1>
         <form method="post">
             <div>
             <label for="title">Название статьи </label><input type="text" name="title" placeholder="Название" value="{{ request.form['title'] }}" required><br>

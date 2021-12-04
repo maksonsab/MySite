@@ -1,12 +1,10 @@
 {% extends 'base.html' %}
-
+{% set header = True %}
 {% block title %} Текст {% endblock %} 
 
 {%  block content %}
     <center>
-        <div style="height: 100px; text-align: center; font-size: 30px;" >
-            <a href="/">Домой</a>
-        </div>
+
         {% for post in data %}
        <div class="artc" style="margin: 20px;">
 

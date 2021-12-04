@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
 
 {% block title %} {{data['title']}} {% endblock %} 
-
+{% set header = True %}
 {%  block content %}
     
 
-    <div style="height: 100px; text-align: center; font-size: 30px;" >
-        <a href="/">Домой</a>
-    </div>
+    
 
     <center>
         <p>Дата создания: {{data['creation_date']}}</p>
