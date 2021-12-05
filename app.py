@@ -1,23 +1,22 @@
 from os import environ
 
+
 from logging import DEBUG
 from flask import Flask, request, render_template, redirect, session, url_for, make_response
-
-
 from werkzeug.wrappers import response
-from auth import check_user_from_cookie
+
 
 from db_operations import db_operation
 import auth
 
+
 app = Flask(__name__, template_folder='templates')
-
 app.config.update(
-
     DEBUG = True,
     SECRET_KEY = environ['SECRET_KEY'],
     ENV = 'development',
 )
+
 
 def dbase(): #return database connection
     return db_operation('database.db')
@@ -40,7 +39,7 @@ def is_loggined():
             print('DEBUG: bad cookies!')  #False
             bad_cookie()
         else:
-            correct_cookie = check_user_from_cookie(username, sign)
+            correct_cookie = auth.check_user_from_cookie(username, sign)
             if correct_cookie[0]: 
                 print('DEBUG: cookies OK!')
                 session['username'] = correct_cookie[1]
@@ -55,7 +54,6 @@ def is_loggined():
 
 @app.route('/', methods=['GET'])
 def index():
-    print(session)
     return render_template('index.html',  data = dbase().get_last_posts(), loggined = session)
 
 

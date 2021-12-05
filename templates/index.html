@@ -34,7 +34,7 @@
           
             <div class="artc">
                 {{art}}
-                <h3><a href={{ 'post/' + post['id']|string }}>{{post['title']}}</a></h3>
+                <h3 id="artc"><a href={{ 'post/' + post['id']|string }}>{{post['title']}}</a></h3>
                 <p>{{post['post_description']}}</p>
             </div>
             {% endfor %}
