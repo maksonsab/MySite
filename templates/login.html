@@ -48,10 +48,11 @@ body{
     </header>
     <div class="placeholder"></div>
     <form method="POST" action="/login">
-
-        <input type="text" name="login" minlength="3" required />
-        <input type="password" name="password" minlength="5" required />
-        <input type="submit" value="Login">
+        {{ form.hidden_tag() }}
+        {{ form.login.label() }} {{ form.login() }}
+        {{ form.psw.label() }} {{ form.psw() }}
+        {{ form.submit() }}
+        
 
     </form>
     <div class="placeholder"></div>

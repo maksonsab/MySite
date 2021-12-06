@@ -1,5 +1,6 @@
 import math
 import sqlite3
+import time
 
 
 from markdown import markdown
@@ -36,13 +37,14 @@ class db_operation(object):
         sql = f'SELECT * FROM posts WHERE id={id}'
         data = dict(self.__cur.execute(sql).fetchone())
         data['content'] = markdown(data['content']) #markdown post content! !!markdown to html when add to database???????
+        data['creation_date'] = time.strftime('%d.%m.%Y', time.gmtime(data['creation_date']))
         self.__connection.close()
         print('db connection closed!')
         return data
     
     def create_post(self, data:dict): 
         '''Добавляет статью в базу данных'''
-        self.__cur.execute('INSERT INTO posts (title, post_description, content) VALUES (?,?,?)', (data['title'], data['post_description'], data['content']))
+        self.__cur.execute('INSERT INTO posts (title, post_description, content, creation_date) VALUES (?,?,?,?)', (data['title'], data['description'], data['content'], int(time.time())))
         self.__connection.commit()
         self.__connection.close()
         print('db connection closed!')

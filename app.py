@@ -1,3 +1,4 @@
+import time
 from os import environ
 
 
@@ -8,6 +9,7 @@ from werkzeug.wrappers import response
 
 from db_operations import db_operation
 import auth
+from forms import LoginForm, PostForm
 
 
 app = Flask(__name__, template_folder='templates')
@@ -66,34 +68,34 @@ def posts():
     return render_template('posts.html', data = dbase().get_posts(), loggined = session)
 
 @app.route('/create', methods=['GET', 'POST'])
-def create():    
-    #print('cookies',request.cookies)
+def create():
+    form = PostForm()   
     if session.get('loggined'):
         if request.method == 'GET':
-            return render_template('create.html', loggined = session)
-        if request.method == 'POST':
+            return render_template('create.html', loggined = session, form = form)
+        if form.validate_on_submit():
             is_loggined()
             if session.get('loggined'):
-                post = request.form
-                print(post)
+                post = form.data
                 dbase().create_post(post)
                 return redirect(url_for('index'))
             else:
                 return bad_cookie()
-    return redirect(url_for('login'))
+                
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    form = LoginForm()
     if request.method == 'GET':
         if session.get('loggined'):
-            print('redirect to create')
             return redirect(url_for('create'), 302)
         print(session)        
-        response = make_response(render_template('login.html', loggined = session), 200)
+        response = make_response(render_template('login.html', loggined = session, form = form), 200)
         return response
-    if request.method == 'POST': 
-        login = request.form['login']
-        password = request.form['password']
+
+    if form.validate_on_submit():
+        login = form.login.data
+        password = form.psw.data
         message = dbase().authorize(login, password)
         if message[0]:
             response = make_response((redirect(url_for('create')), 302))
@@ -104,6 +106,8 @@ def login():
         else:
             print(message[1]) #debug
             return bad_cookie()
+
+
 
                 
 @app.route('/logout', methods = ['GET'])

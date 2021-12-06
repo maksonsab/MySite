@@ -7,16 +7,19 @@
     <center>
         <h1 style="margin-top:100px">Добавить новость:</h1>
         <form method="post">
+            {{ form.hidden_tag() }}
+
             <div>
-            <label for="title">Название статьи </label><input type="text" name="title" placeholder="Название" value="{{ request.form['title'] }}" required><br>
+                {{ form.title.label()}} {{ form.title() }}
             <div style="height: 5px;"></div>
-            <label for="art_description">Описание статьи </label><input type="text" name="post_description" placeholder="Описание" value="{{ request.form['art_description'] }}" required><br>
+            {{ form.description.label() }} {{ form.description()}}
+            
             </div>
             <div style="margin:5px">
-                <textarea type="text" name="content" id="content" placeholder="Содержание статьи, поддерживается markdown..." value="{{ request.form['content'] }}" required cols="120" rows="20"></textarea>
+                {{form.content()}}
             </div>
             <div>
-                <button type="submit">Отправить</button>
+                {{ form.submit() }}
             </div>
 
         </form>
