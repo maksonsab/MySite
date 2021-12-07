@@ -52,23 +52,37 @@ header {
 .articles {
 
 display: flex;
-justify-content: space-between;
-width: 90%;
+justify-content: space-around;
+flex-direction: column;
+width: 100%;
 align-items: center;
 
 }
 
+
 .artc {
 
     display: block;
-    width: 25%;
+    width: 40%;
+    height: 150px;
     background-color: blanchedalmond;
     box-shadow: 0 0 15px rgba(0,0,0,0.5);
     padding: 10px;
+    margin-bottom: 20px;
     border-radius: 10px;
     color: black;
 
 }
+
+@media (max-width: 640px) {
+    .artc {
+        display: block;
+        width: 70%;
+        
+    
+    }
+}
+
 
 #artc a {
     color: black;

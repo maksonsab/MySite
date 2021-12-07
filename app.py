@@ -7,8 +7,8 @@ from flask import Flask, request, render_template, redirect, session, url_for, m
 from werkzeug.wrappers import response
 
 
-from db_operations import db_operation
-import auth
+from database import db_operations
+from database import auth
 from forms import LoginForm, PostForm
 
 
@@ -21,7 +21,7 @@ app.config.update(
 
 
 def dbase(): #return database connection
-    return db_operation('database.db')
+    return db_operations.db_operation('database.db')
 
 def bad_cookie(where='login') -> response: #cleaning cookies 
     response = make_response(redirect(url_for(where)), 302)

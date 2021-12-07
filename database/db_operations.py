@@ -4,7 +4,7 @@ import time
 
 
 from markdown import markdown
-import auth
+from database import auth
 
 class db_operation(object):
     '''Выполняет операции с базой данных'''

@@ -26,12 +26,8 @@
     </center>
     <center>
         <div class="articles">
-           
-            
-            {% for post in data %}
-            
-            
-          
+
+            {% for post in data %}     
             <div class="artc">
                 {{art}}
                 <h3 id="artc"><a href={{ 'post/' + post['id']|string }}>{{post['title']}}</a></h3>
