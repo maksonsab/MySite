@@ -7,8 +7,7 @@ from flask import Flask, request, render_template, redirect, session, url_for, m
 from werkzeug.wrappers import response
 
 
-from database import db_operations
-from database import auth
+from database import db_operations, auth
 from forms import LoginForm, PostForm
 
 
@@ -32,24 +31,21 @@ def bad_cookie(where='login') -> response: #cleaning cookies
 
 @app.before_first_request
 def is_loggined():
-    print('before req')
     user = request.cookies.get('username')
     if user:
         try:
             username, sign = user.split('.')
         except ValueError:
-            print('DEBUG: bad cookies!')  #False
             bad_cookie()
         else:
             correct_cookie = auth.check_user_from_cookie(username, sign)
             if correct_cookie[0]: 
-                print('DEBUG: cookies OK!')
                 session['username'] = correct_cookie[1]
                 session['loggined'] = True
                 session.modified = True
     else:
-        print('DEBUG: no cookies!')
         session['loggined'] = False
+        session.modified = True
         
 
 
@@ -57,7 +53,6 @@ def is_loggined():
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html',  data = dbase().get_last_posts(), loggined = session)
-
 
 @app.route('/post/<int:id>', methods=['GET'])
 def post(id = None):

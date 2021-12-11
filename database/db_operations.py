@@ -36,6 +36,10 @@ class db_operation(object):
         '''Возвращает словарь с содержимым статьи'''
         sql = f'SELECT * FROM posts WHERE id={id}'
         data = dict(self.__cur.execute(sql).fetchone())
+        counter = data.get('viewes') + 1
+        update_view = f'UPDATE posts SET viewes = {counter} WHERE id={id}'
+        self.__cur.execute(update_view)
+        self.__connection.commit()
         data['content'] = markdown(data['content']) #markdown post content! !!markdown to html when add to database???????
         data['creation_date'] = time.strftime('%d.%m.%Y', time.gmtime(data['creation_date']))
         self.__connection.close()
