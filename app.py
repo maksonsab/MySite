@@ -3,7 +3,7 @@ from os import environ
 
 
 from logging import DEBUG
-from flask import Flask, request, render_template, redirect, session, url_for, make_response
+from flask import Flask, request, render_template, redirect, session, url_for, make_response, abort
 from werkzeug.wrappers import response
 
 
@@ -54,9 +54,12 @@ def is_loggined():
 def index():
     return render_template('index.html',  data = dbase().get_last_posts(), loggined = session)
 
-@app.route('/post/<int:id>', methods=['GET'])
-def post(id = None):
-    return render_template('post.html', data = dbase().get_post(id), loggined = session)
+@app.route('/post/<uri>', methods=['GET'])
+def post(uri = None):
+    data = dbase().get_post(uri)
+    if data:
+        return render_template('post.html', data = data, loggined = session)
+    return abort(404)
 
 @app.route('/posts/', methods=['GET'])
 def posts():

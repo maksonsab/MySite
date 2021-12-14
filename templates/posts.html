@@ -8,7 +8,7 @@
         {% for post in data %}
        <div class="artc" style="margin: 20px;">
 
-            <h2><a href= {{ url_for('post', id=post['id'])  }}> {{post['title'] }}</a></h2>
+            <h2><a href= {{ url_for('post', uri=post['uri'])  }}> {{post['title'] }}</a></h2>
             <p>{{ post['post_description'] }}</p>
         
        </div>
@@ -18,4 +18,3 @@
 {% endblock %}
 
 
-'/post/' + post['id']|string 

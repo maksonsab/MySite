@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS articles;
+DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS users;
 
 
@@ -8,7 +8,12 @@ CREATE TABLE IF NOT EXISTS posts (
 	title TEXT NOT NULL,
 	post_description TEXT NOT NULL,
 	content TEXT NOT NULL,
-	viewes INTEGER DEFAULT 0 
+	viewes INTEGER DEFAULT 0, 
+	rating INTEGER DEFAULT 0,
+	author INTEGER NOT NULL DEFAULT 1,
+	visible BOOLEAN DEFAULT 1,
+	uri TEXT NOT NULL,
+	UNIQUE(title, uri)
 );
 
 CREATE TABLE IF NOT EXISTS users (
@@ -16,5 +21,7 @@ CREATE TABLE IF NOT EXISTS users (
 	username TEXT NOT NULL,
 	passwrd TEXT NOT NULL,
 	first_name TEXT NOT NULL,
-	last_name TEXT NOT NULL
-)
+	last_name TEXT NOT NULL,
+	avatar BLOB DEFAULT NULL,
+	UNIQUE (username)
+);

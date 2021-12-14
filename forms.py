@@ -19,5 +19,8 @@ class PostForm(FlaskForm):
     content = TextAreaField('Статья: ', 
         render_kw = {'placeholder':'Содержание статьи, поддерживается markdown...', 'cols':120, 'rows':20}, 
         validators = [InputRequired()])
+    uri = StringField('Cсылка',
+            render_kw={'placeholder' : 'Ссылка на статью...'},
+            validators=[InputRequired(message='Обязательное поле '), Length(min=7, max=35)])
     submit = SubmitField('Опубликовать')
     

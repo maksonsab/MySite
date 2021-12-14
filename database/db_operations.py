@@ -32,23 +32,26 @@ class db_operation(object):
         print('db connection closed!')
         return data
 
-    def get_post(self, id:int) -> dict:
+    def get_post(self, uri:str) -> dict:
         '''Возвращает словарь с содержимым статьи'''
-        sql = f'SELECT * FROM posts WHERE id={id}'
-        data = dict(self.__cur.execute(sql).fetchone())
-        counter = data.get('viewes') + 1
-        update_view = f'UPDATE posts SET viewes = {counter} WHERE id={id}'
-        self.__cur.execute(update_view)
-        self.__connection.commit()
-        data['content'] = markdown(data['content']) #markdown post content! !!markdown to html when add to database???????
-        data['creation_date'] = time.strftime('%d.%m.%Y', time.gmtime(data['creation_date']))
-        self.__connection.close()
-        print('db connection closed!')
-        return data
+        sql = f'SELECT * FROM posts WHERE uri="{uri}"'
+        data = self.__cur.execute(sql).fetchone()
+        data = dict(data) if data else None
+        if data:
+            counter = data.get('viewes') + 1
+            update_view = f'UPDATE posts SET viewes = {counter} WHERE uri="{uri}"'
+            self.__cur.execute(update_view)
+            self.__connection.commit()
+            data['content'] = markdown(data['content']) #markdown post content! !!markdown to html when add to database???????
+            data['creation_date'] = time.strftime('%d.%m.%Y', time.gmtime(data['creation_date']))
+            self.__connection.close()
+            print('db connection closed!')
+            return data
+        return False
     
     def create_post(self, data:dict): 
         '''Добавляет статью в базу данных'''
-        self.__cur.execute('INSERT INTO posts (title, post_description, content, creation_date) VALUES (?,?,?,?)', (data['title'], data['description'], data['content'], int(time.time())))
+        self.__cur.execute('INSERT INTO posts (title, post_description, content, creation_date, uri) VALUES (?,?,?,?,?)', (data['title'], data['description'], data['content'], int(time.time()), data['uri']))
         self.__connection.commit()
         self.__connection.close()
         print('db connection closed!')
@@ -68,6 +71,9 @@ class db_operation(object):
         else:
             return(False, 'Wrong username!')
 
+    def get_user(name: str) -> dict:
+        '''Возвращает информацию по запрошенному пользователю'''
+        pass
         
 
 
