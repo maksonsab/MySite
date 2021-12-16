@@ -5,6 +5,7 @@ from os import environ
 from logging import DEBUG
 from flask import Flask, request, render_template, redirect, session, url_for, make_response, abort
 from werkzeug.wrappers import response
+from flask_sqlalchemy import SQLAlchemy
 
 
 from database import db_operations, auth
@@ -16,7 +17,20 @@ app.config.update(
     DEBUG = True,
     SECRET_KEY = environ['SECRET_KEY'],
     ENV = 'development',
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db',
+    SQLALCHEMY_TRACK_MODIFICATIONS = False,
 )
+
+db = SQLAlchemy(app)
+
+class Users(db.Model):
+    id = db.Column(db.Integer, primary_key = True)
+    username = db.Column(db.String(30), unique = True, nullable = False)
+    passwrd = db.Column(db.String(50), nullable = False)
+    first_name = db.Column(db.String(30))
+    last_name = db.Column(db.String(50))
+    avatar = db.Column(db.LargeBinary())
+
 
 
 def dbase(): #return database connection
