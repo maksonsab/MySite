@@ -10,7 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from database import db_operations, auth
 from forms import LoginForm, PostForm
-
+import models
 
 app = Flask(__name__, template_folder='templates')
 app.config.update(
@@ -19,18 +19,10 @@ app.config.update(
     ENV = 'development',
     SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db',
     SQLALCHEMY_TRACK_MODIFICATIONS = False,
+
 )
 
 db = SQLAlchemy(app)
-
-class Users(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    username = db.Column(db.String(30), unique = True, nullable = False)
-    passwrd = db.Column(db.String(50), nullable = False)
-    first_name = db.Column(db.String(30))
-    last_name = db.Column(db.String(50))
-    avatar = db.Column(db.LargeBinary())
-
 
 
 def dbase(): #return database connection
@@ -135,6 +127,14 @@ def test():
         string = session
         return string
     return 'Not loggined'
+
+@app.route('/alchemy/<user>', methods = ['GET'])
+def alc(user):
+    db_user = models.Users.get_user(user)
+    if db_user:
+        return db_user.username
+    
+    return 'User not found!' 
 
 
 
