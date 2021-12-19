@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} {{data['title']}} {% endblock %} 
+{% block title %} {{data.title}} {% endblock %} 
 {% set header = True %}
 {%  block content %}
     
@@ -8,8 +8,9 @@
     
 
     <center>
-        <p>Дата создания: {{  data['creation_date'] }} Просмотров: {{ data['viewes'] }} Рейтинг: {{data['rating'] }}</p>
-        {{ data['content'] | safe}}
+        <p>Дата создания: {{  data.creation_date.strftime('%d.%m.%Y') }} Просмотров: {{ data.viewes }} Рейтинг: {{data.rating }}</p>
+        {{ data.content | safe}}
+        <p>Автор: {{ data.author_name}}</p>
 
        
     </center>

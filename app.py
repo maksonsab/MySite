@@ -1,3 +1,4 @@
+import re
 import time
 from os import environ
 
@@ -6,9 +7,10 @@ from logging import DEBUG
 from flask import Flask, request, render_template, redirect, session, url_for, make_response, abort
 from werkzeug.wrappers import response
 from flask_sqlalchemy import SQLAlchemy
+import auth
 
 
-from database import db_operations, auth
+from database import db_operations
 from forms import LoginForm, PostForm
 import models
 
@@ -48,6 +50,7 @@ def is_loggined():
             if correct_cookie[0]: 
                 session['username'] = correct_cookie[1]
                 session['loggined'] = True
+                session['user_id'] = 1
                 session.modified = True
     else:
         session['loggined'] = False
@@ -81,7 +84,9 @@ def create():
             is_loggined()
             if session.get('loggined'):
                 post = form.data
-                dbase().create_post(post)
+                post['user_id'] = session.get('user_id')
+                print(post)
+                models.Posts(post)
                 return redirect(url_for('index'))
             else:
                 return bad_cookie()
@@ -100,7 +105,7 @@ def login():
     if form.validate_on_submit():
         login = form.login.data
         password = form.psw.data
-        message = dbase().authorize(login, password)
+        message = models.Users.authorize(login, password)
         if message[0]:
             response = make_response((redirect(url_for('create')), 302))
             response.set_cookie('username', auth.sign_data(login), max_age = 1*24*3600)
@@ -136,6 +141,14 @@ def alc(user):
     
     return 'User not found!' 
 
+
+@app.route('/alchemy/posts/<uri>')
+def alc_post(uri):
+    post = models.Posts.get_post(uri)
+    if post:
+        return render_template('post.html', data = post, loggined = session)
+    else:
+        return "Post not found"
 
 
 if __name__ == '__main__':

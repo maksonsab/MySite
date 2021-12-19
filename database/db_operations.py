@@ -1,10 +1,12 @@
 import math
 import sqlite3
 import time
-
+import sys
 
 from markdown import markdown
-from database import auth
+import auth
+
+sys.path.append('..')
 
 class db_operation(object):
     '''Выполняет операции с базой данных'''
