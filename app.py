@@ -30,9 +30,6 @@ def bad_cookie(where='login') -> response: #cleaning cookies
     session['loggined'] = False
     return response
 
-@app.before_request
-def pr_ses():
-    print(session)
 
 @app.before_first_request
 def is_loggined():
@@ -127,22 +124,7 @@ def test():
         return string
     return 'Not loggined'
 
-@app.route('/alchemy/<user>', methods = ['GET'])
-def alc(user):
-    db_user = models.Users.get_user(user)
-    if db_user:
-        return db_user.username
-    
-    return 'User not found!' 
 
-
-@app.route('/alchemy/posts/<uri>')
-def alc_post(uri):
-    post = models.Posts.get_post(uri)
-    if post:
-        return render_template('post.html', data = post, loggined = session)
-    else:
-        return "Post not found"
 
 
 if __name__ == '__main__':

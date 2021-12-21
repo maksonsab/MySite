@@ -9,6 +9,7 @@
 
     <center>
         <p>Дата создания: {{  data.creation_date.strftime('%d.%m.%Y') }} Просмотров: {{ data.viewes }} Рейтинг: {{data.rating }}</p>
+        <h1>{{ data.title }}</h1>
         {{ data.content | safe}}
         <p>Автор: {{ data.author_name}}</p>
 

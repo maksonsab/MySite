@@ -90,7 +90,7 @@ class Posts(db.Model):
         self.creation_date = datetime.datetime.now()
         self.title = post.get('title')
         self.post_description = post.get('description')
-        self.content = f'<h1>{self.title}</h1><br/>' + post.get('content')
+        self.content = post.get('content')
         self.uri = post.get('uri')
         self.author = author
         try:
