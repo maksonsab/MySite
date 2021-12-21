@@ -32,7 +32,7 @@
         <div class="head-el">
             <a href="{{url_for('logout')}}">Выйти</a>
         </div>
-            <div class="head_el">Привет, {{loggined['username']}}!</div>
+            <div class="head_el">Привет, {{ loggined['user'] }}!</div>
             {% endif %}
         </div>
     </header>
