@@ -1,26 +1,27 @@
-import time
 from os import environ
 
 
-from logging import DEBUG
 from flask import Flask, request, render_template, redirect, session, url_for, make_response, abort
 from werkzeug.wrappers import response
+from flask_sqlalchemy import SQLAlchemy
 
 
-from database import db_operations, auth
 from forms import LoginForm, PostForm
-
+import models
 
 app = Flask(__name__, template_folder='templates')
 app.config.update(
     DEBUG = True,
     SECRET_KEY = environ['SECRET_KEY'],
     ENV = 'development',
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///database.db',
+    SQLALCHEMY_TRACK_MODIFICATIONS = False,
+
 )
 
+db = SQLAlchemy(app)
 
-def dbase(): #return database connection
-    return db_operations.db_operation('database.db')
+
 
 def bad_cookie(where='login') -> response: #cleaning cookies 
     response = make_response(redirect(url_for(where)), 302)
@@ -28,6 +29,10 @@ def bad_cookie(where='login') -> response: #cleaning cookies
     session.clear()
     session['loggined'] = False
     return response
+
+@app.before_request
+def pr_ses():
+    print(session)
 
 @app.before_first_request
 def is_loggined():
@@ -38,11 +43,12 @@ def is_loggined():
         except ValueError:
             bad_cookie()
         else:
-            correct_cookie = auth.check_user_from_cookie(username, sign)
+            correct_cookie = models.Users.check_user_from_cookie(username, sign)
             if correct_cookie[0]: 
-                session['username'] = correct_cookie[1]
+                session['user'] = models.Users.get_user(correct_cookie[1]).username
                 session['loggined'] = True
                 session.modified = True
+                
     else:
         session['loggined'] = False
         session.modified = True
@@ -52,18 +58,18 @@ def is_loggined():
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html',  data = dbase().get_last_posts(), loggined = session)
+    return render_template('index.html',  data = models.Posts.get_last_posts(), loggined = session)
 
 @app.route('/post/<uri>', methods=['GET'])
 def post(uri = None):
-    data = dbase().get_post(uri)
+    data = models.Posts.get_post(uri)
     if data:
         return render_template('post.html', data = data, loggined = session)
     return abort(404)
 
 @app.route('/posts/', methods=['GET'])
 def posts():
-    return render_template('posts.html', data = dbase().get_posts(), loggined = session)
+    return render_template('posts.html', data = models.Posts.get_posts(), loggined = session)
 
 @app.route('/create', methods=['GET', 'POST'])
 def create():
@@ -75,7 +81,7 @@ def create():
             is_loggined()
             if session.get('loggined'):
                 post = form.data
-                dbase().create_post(post)
+                models.Posts(post, author = models.Users.get_user(session.get('user')))
                 return redirect(url_for('index'))
             else:
                 return bad_cookie()
@@ -94,15 +100,14 @@ def login():
     if form.validate_on_submit():
         login = form.login.data
         password = form.psw.data
-        message = dbase().authorize(login, password)
-        if message[0]:
+        message = models.Users.authorize(login, password)
+        if message:
             response = make_response((redirect(url_for('create')), 302))
-            response.set_cookie('username', auth.sign_data(login), max_age = 1*24*3600)
-            session['username'] = login
+            response.set_cookie('username', models.Users.sign_data(login), max_age = 1*24*3600)
+            session['user'] = message.username
             session['loggined'] = True
             return response
         else:
-            print(message[1]) #debug
             return bad_cookie()
 
 
@@ -122,6 +127,22 @@ def test():
         return string
     return 'Not loggined'
 
+@app.route('/alchemy/<user>', methods = ['GET'])
+def alc(user):
+    db_user = models.Users.get_user(user)
+    if db_user:
+        return db_user.username
+    
+    return 'User not found!' 
+
+
+@app.route('/alchemy/posts/<uri>')
+def alc_post(uri):
+    post = models.Posts.get_post(uri)
+    if post:
+        return render_template('post.html', data = post, loggined = session)
+    else:
+        return "Post not found"
 
 
 if __name__ == '__main__':
