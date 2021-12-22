@@ -1,5 +1,7 @@
 import hashlib, hmac, os, base64, datetime
 
+import sqlalchemy
+
 
 from app import db 
 
@@ -30,14 +32,14 @@ class Users(db.Model):
     @staticmethod
     def authorize(login: str, password: str) -> tuple:
         '''Возвращает кортеж с bool-ключем авторизации и сообщением для вывода в консоль (отладка)'''
-        print(login, password)
-        user = Users.query.filter_by(username = login).one()
-        if user:
-            print(user)
+        try:
+            user = Users.query.filter_by(username = login).one()
             if Users.hash_password(password) == user.passwrd:
-                return Users.get_user(login)
-        else:
-            return(False, 'Wrong username or password!')
+                return user.username
+        except Exception:
+            print(f'Bad authorize request:\nLogin: {login}\nPassword: {password}')
+            pass
+        return False
 
     @staticmethod
     def create_sign(username: str) -> str:

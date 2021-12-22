@@ -31,6 +31,10 @@ def bad_cookie(where='login') -> response: #cleaning cookies
     return response
 
 
+@app.before_request
+def print_ses():
+    print(session)
+
 @app.before_first_request
 def is_loggined():
     user = request.cookies.get('username')
@@ -82,6 +86,7 @@ def create():
                 return redirect(url_for('index'))
             else:
                 return bad_cookie()
+    return redirect(url_for('login'))
                 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -101,7 +106,7 @@ def login():
         if message:
             response = make_response((redirect(url_for('create')), 302))
             response.set_cookie('username', models.Users.sign_data(login), max_age = 1*24*3600)
-            session['user'] = message.username
+            session['user'] = message
             session['loggined'] = True
             return response
         else:
