@@ -2,13 +2,32 @@
 
 {% block title %} {{data.title}} {% endblock %} 
 {% set header = True %}
+
+{% block script %}
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function(){
+        let btn = document.querySelector('.plus');
+        btn.addEventListener('click', async function(event){
+        
+            event.preventDefault();
+            let response = await fetch("/vote/{{data.id}}", {
+                method : 'UPDATE'
+            });
+            let rat = document.querySelector('.rating');
+            let new_rat = Number(rat.textContent) + 1;
+            rat.textContent = (String(new_rat))
+            btn.style.display = 'None'
+        })
+    })
+</script>
+{% endblock %}
 {%  block content %}
     
 
     
 
     <center>
-        <p>Дата создания: {{  data.creation_date.strftime('%d.%m.%Y') }} Просмотров: {{ data.viewes }} Рейтинг: {{data.rating }}</p>
+        <p>Дата создания: {{  data.creation_date.strftime('%d.%m.%Y') }} Просмотров: {{ data.viewes }} Рейтинг: <span class="rating">{{data.rating }}</span> <span class="plus">+</span></p>
         <h1>{{ data.title }}</h1>
         {{ data.content | safe}}
         <p>Автор: {{ data.author_name}}</p>

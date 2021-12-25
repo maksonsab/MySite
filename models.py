@@ -100,16 +100,30 @@ class Posts(db.Model):
             db.session.commit()
         except Exception as e:
             print(e)
-
     
-    def get_post(uri:str):
+    
+    def voteup(self) -> None:
+        '''Увеличивает счетчик рейтинга поста'''
+        self.rating += 1
+        db.session.commit()
+    
+
+    def change_visible(self) -> None:
+        '''Скрывает или открывает пост'''
+        if self.visible:
+            self.visible = False
+        else: self.visible = True
+        db.session.commit()
+    @staticmethod
+    def get_post(uri:str, update = True):
         '''Возвращает пост с автором поста по id автора'''
         post = Posts.query.filter_by(uri = uri).one()
         if post:
             post.author_name = post.author.first_name + ' ' + post.author.last_name
             #post.creation_date = time.strftime('%d.%m.%Y', time.gmtime(post.creation_date))
-            post.viewes += 1
-            db.session.commit()
+            if update:
+                post.viewes += 1
+                db.session.commit()
             return post
         return None
 
@@ -127,11 +141,7 @@ class Posts(db.Model):
         data = Posts.query.filter(Posts.visible).order_by(Posts.id.desc()).all()
         return data
 
-    def change_visible(self):
-        if self.visible:
-            self.visible = False
-        else: self.visible = True
-        db.session.commit()
+    
         
 
 if __name__ == '__main__':

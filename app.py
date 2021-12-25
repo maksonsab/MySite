@@ -1,3 +1,4 @@
+import logging
 from os import environ
 
 
@@ -119,6 +120,16 @@ def login():
 def logout():
     return bad_cookie(where = 'index')
 
+
+@app.route('/vote/<int:id>', methods = ['UPDATE'])
+def vote(id):
+    post = models.Posts.query.get(id)
+    print(post.rating)
+    post.voteup()
+    return make_response(
+        str(post.rating),
+        200,
+    )
 
 @app.route('/test', methods = ['GET'])
 def test():
