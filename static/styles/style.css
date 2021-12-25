@@ -74,15 +74,6 @@ align-items: center;
 
 }
 
-@media (max-width: 640px) {
-    .artc {
-        display: block;
-        width: 70%;
-        
-    
-    }
-}
-
 
 #artc a {
     color: black;
@@ -116,4 +107,27 @@ align-items: center;
 
 .plus {
     cursor: pointer;
+    height: 15px;
+    position: relative;
+}
+
+.content {
+    width: 50%;
+}
+.content img {
+    width: 100%;
+}
+
+
+
+@media (max-width: 640px) {
+    .artc {
+        display: block;
+        width: 70%;
+        
+    
+    }
+    .content {
+        width: 100%;
+    }
 }
