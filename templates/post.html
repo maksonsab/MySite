@@ -11,12 +11,13 @@
         
             event.preventDefault();
             let response = await fetch("/vote/{{data.id}}", {
-                method : 'UPDATE'
+                method : 'PUT'
             });
+            let response_text = await response.json();
             let rat = document.querySelector('.rating');
             let new_rat = Number(rat.textContent) + 1;
-            rat.textContent = (String(new_rat))
-            btn.style.display = 'None'
+            rat.textContent = (String(response_text.rating));
+            btn.style.display = 'None';
         })
     })
 </script>

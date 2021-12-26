@@ -1,8 +1,7 @@
-import logging
 from os import environ
 
 
-from flask import Flask, request, render_template, redirect, session, url_for, make_response, abort
+from flask import Flask, request, render_template, redirect, session, url_for, make_response, abort, json
 from werkzeug.wrappers import response
 from flask_sqlalchemy import SQLAlchemy
 
@@ -121,15 +120,16 @@ def logout():
     return bad_cookie(where = 'index')
 
 
-@app.route('/vote/<int:id>', methods = ['UPDATE'])
+@app.route('/vote/<int:id>', methods = ['PUT'])
 def vote(id):
     post = models.Posts.query.get(id)
-    print(post.rating)
+    print(post.rating, type(post.rating))
     post.voteup()
-    return make_response(
-        str(post.rating),
-        200,
-    )
+    data = json.dumps({'rating' : post.rating})
+    print(data, type(data))
+    response = make_response(data, 200,)
+    response.headers['Content-Type'] = 'aplication/json'
+    return response
 
 @app.route('/test', methods = ['GET'])
 def test():
