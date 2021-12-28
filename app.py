@@ -1,7 +1,9 @@
-from os import environ
+from os import environ,path
+import random
+from string import ascii_lowercase, digits
 
 
-from flask import Flask, request, render_template, redirect, session, url_for, make_response, abort, json
+from flask import Flask, request, render_template, redirect, session, url_for, make_response, abort, json, send_file
 from werkzeug.wrappers import response
 from flask_sqlalchemy import SQLAlchemy
 
@@ -29,6 +31,12 @@ def bad_cookie(where='login') -> response: #cleaning cookies
     session.clear()
     session['loggined'] = False
     return response
+
+
+def random_name(extension:str) -> str:
+    '''Возвращает рандомное имя файла с его расширением'''
+    return ''.join(random.sample(ascii_lowercase + digits, 10)) + '.' + extension
+
 
 
 @app.before_request
@@ -130,6 +138,31 @@ def vote(id):
     response = make_response(data, 200,)
     response.headers['Content-Type'] = 'aplication/json'
     return response
+
+@app.route('/upload_img', methods = ['POST'])
+def upload_img():
+    '''Загружает фото на сервер и возвращает JSON с ключами путь и имя файла'''
+    if request.files:
+        image = request.files['image-input']
+        image_extension = image.filename.rsplit('.')[1]
+        image.filename = random_name(image_extension)
+        image.save(path.join('./static/images/posts', image.filename))
+        pim = 'posts/' + image.filename #path to image
+        print('\n\n\nFILE OK!')
+        response = make_response(json.dumps({'path':pim, 'name' : image.filename}), 200)
+        response.headers['Content-Type'] = 'aplication/json'
+        return response
+
+    return redirect(url_for('index'))
+
+@app.route('/image/<path:path_to_image>')
+def get_image(path_to_image):
+    try:
+        image_dir = path.join('./static/images/')
+        image = image_dir + path_to_image
+        return send_file(image, mimetype='image/jpeg')
+    except Exception:
+        return abort(404)
 
 @app.route('/test', methods = ['GET'])
 def test():

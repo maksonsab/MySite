@@ -6,7 +6,14 @@
 
     <center>
         <h1 style="margin-top:100px">Добавить новость:</h1>
-        <form method="post">
+        <div class="image-uploader">
+            <form action="/upload_img" method="post" enctype="multipart/form-data"> 
+                <label for="image-input">Превью поста</label> <input type="file" name="image-input">
+                <input type="submit" id="upload-submit">
+                
+            </form>
+        </div>
+        <form method="post" action="/create">
             {{ form.hidden_tag() }}
 
             <div>
