@@ -22,5 +22,8 @@ class PostForm(FlaskForm):
     uri = StringField('Cсылка',
             render_kw={'placeholder' : 'Ссылка на статью...'},
             validators=[InputRequired(message='Обязательное поле '), Length(min=7, max=35)])
+    post_image = StringField('Основное изображение',
+            render_kw={'placeholder' : 'Здесь будет ссылка после загрузки изображения', 'id' : 'image_uri'},
+            validators= [InputRequired()])
     submit = SubmitField('Опубликовать')
     

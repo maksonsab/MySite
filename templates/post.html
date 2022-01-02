@@ -29,8 +29,9 @@
 
     <center>
         <p>Дата создания: {{  data.creation_date.strftime('%d.%m.%Y') }} Просмотров: {{ data.viewes }} Рейтинг: <span class="rating">{{data.rating }}</span> <img src="/static/graphics/Arrow_up.svg" class="plus"></p>
-        <h1>{{ data.title }}</h1>
         <div class="content">
+            <h1>{{ data.title }}</h1>
+            <img src="{{data.post_image}}">
             {{ data.content | safe}}
             <p>Автор: {{ data.author_name}}</p>
         </div>

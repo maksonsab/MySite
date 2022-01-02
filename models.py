@@ -77,6 +77,7 @@ class Posts(db.Model):
     creation_date = db.Column(db.DateTime, nullable = False)
     title = db.Column(db.String(100), nullable = False)
     post_description = db.Column(db.String(255), nullable = False)
+    post_image = db.Column(db.String(255), nullable = False)
     content = db.Column(db.Text, nullable = False)
     viewes = db.Column(db.Integer, default = 0)
     rating = db.Column(db.Integer, default = 0)
@@ -92,6 +93,7 @@ class Posts(db.Model):
         self.creation_date = datetime.datetime.now()
         self.title = post.get('title')
         self.post_description = post.get('description')
+        self.post_image = post.get('post_image')
         self.content = post.get('content')
         self.uri = post.get('uri')
         self.author = author
