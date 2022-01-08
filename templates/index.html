@@ -22,9 +22,8 @@
             </div>
         </div>
 
-
-    </center>
-    <center>
+        {% if data%}
+    
         <div class="articles">
 
             {% for post in data %}     
@@ -37,6 +36,9 @@
 
         </div>
         <div class="allart"><a href="/posts" id="allart">Все статьи</a></div>
+    
+    {% endif %}
     </center>
+    
     
 {% endblock %}

@@ -1,3 +1,4 @@
+import traceback
 from os import environ,path
 import random
 from string import ascii_lowercase, digits
@@ -5,7 +6,7 @@ from string import ascii_lowercase, digits
 
 from flask import Flask, request, render_template, redirect, session, url_for, make_response, abort, json, send_file
 from werkzeug.wrappers import response
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy, model
 
 
 from forms import LoginForm, PostForm
@@ -80,6 +81,21 @@ def post(uri = None):
 def posts():
     return render_template('posts.html', data = models.Posts.get_posts(), loggined = session)
 
+
+@app.route('/user/<user>', methods = ['GET'])
+def about_user(user):
+    try:
+        user = models.Users.query.filter_by(username = user).one()
+        posts = models.Posts.query.with_entities(models.Posts.id).filter_by(author_id = user.id)
+        response = make_response(render_template('user.html', user = user, loggined = session, posts = posts.count()), 200)
+        return response
+    except Exception:
+        traceback.print_exc()
+        return abort(404)
+
+        
+    
+
 @app.route('/create', methods=['GET', 'POST'])
 def create():
     form = PostForm()   
@@ -108,8 +124,10 @@ def login():
         return response
 
     if form.validate_on_submit():
+        print(request.form)
         login = form.login.data
         password = form.psw.data
+        print(login, password)
         message = models.Users.authorize(login, password)
         if message:
             response = make_response((redirect(url_for('create')), 302))
@@ -119,6 +137,8 @@ def login():
             return response
         else:
             return bad_cookie()
+    if request.method == 'POST':
+        return redirect(url_for('index'))
 
 
 
@@ -142,7 +162,7 @@ def vote(id):
 @app.route('/upload_img', methods = ['POST'])
 def upload_img():
     '''Загружает фото на сервер и возвращает JSON с ключами путь и имя файла'''
-    if request.files:
+    if session.get('loggined') and request.files:
         image = request.files['image-input']
         image_extension = image.filename.rsplit('.')[1]
         image.filename = random_name(image_extension)
@@ -153,7 +173,7 @@ def upload_img():
         response.headers['Content-Type'] = 'aplication/json'
         return response
 
-    return redirect(url_for('index'))
+    return abort(401)
 
 @app.route('/image/<path:path_to_image>')
 def get_image(path_to_image):

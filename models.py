@@ -1,7 +1,5 @@
 import hashlib, hmac, os, base64, datetime
 
-import sqlalchemy
-
 
 from app import db 
 
@@ -13,7 +11,7 @@ class Users(db.Model):
     passwrd = db.Column(db.String(50), nullable = False)
     first_name = db.Column(db.String(30))
     last_name = db.Column(db.String(50))
-    avatar = db.Column(db.LargeBinary())
+    avatar = db.Column(db.String(255))
     posts = db.relationship('Posts', backref='author', )
 
     def __repr__(self) -> str:

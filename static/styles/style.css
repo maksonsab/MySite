@@ -23,14 +23,23 @@ header {
 .head-el {
 
     color: #fdebd6;
+    text-decoration: none;
 
 }
 
 
 .head-el a {
     color: #fdebd6;
+    text-decoration: none;
 }
 
+
+.main-content {
+
+    min-height: 100vh;
+    
+
+}
 .info-block {
 
     padding-top: 30vh;
@@ -48,6 +57,13 @@ header {
 
 }
 
+
+.content-art{
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    
+}
 
 .articles {
 
@@ -116,6 +132,26 @@ align-items: center;
 }
 .content img {
     width: 100%;
+}
+
+footer {
+    position:relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: black;
+    padding-bottom: 0;
+    margin-bottom: 0;
+
+}
+.footer-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    color: #fdebd6;
+    text-decoration: none;
+
 }
 
 .image-uploader {

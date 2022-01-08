@@ -18,29 +18,39 @@
 
 </head>
 <body>
-    
-    {% if header %}
-    <header>
-        {% if not main_page %}
-        <div class="head-el">
-            <a href="/">Главная</a>
-        </div>
-        {% endif %}
-        {% if loggined['loggined'] %}
-        <div class="head-el">
-            <a href="{{url_for('create')}}" >Добавить пост</a>
-        </div>
-        <div class="head-el">
-            <a href="{{url_for('logout')}}">Выйти</a>
-        </div>
-            <div class="head_el">Привет, {{ loggined['user'] }}!</div>
+        {% if header %}
+        <header>
+            {% if not main_page %}
+            <div class="head-el">
+                <a href="/">Главная</a>
+            </div>
             {% endif %}
-        </div>
-    </header>
-    {% endif %}
-    
+            {% if loggined['loggined'] %}
+            <div class="head-el">
+                <a href="{{url_for('create')}}" >Добавить пост</a>
+            </div>
+            <div class="head-el">
+                <a href="{{url_for('logout')}}">Выйти</a>
+            </div>
+            <div class="head_el">
+                <span>Привет, <a href={{url_for('about_user', user=loggined['user'])}} class="head-el">{{ loggined['user'] }}</a>!</span>
+            </div>
+                {% endif %}
+        </header>
+        {% endif %}
+        
 
-    
-    {% block content %} {% endblock %}
+        <div class="main-content">
+        {% block content %} {% endblock %}
+        </div>
+    <footer>
+        <div class="footer-content">
+            <p>Максим Сабирзанов | 2022</p>
+           
+            <p><a href="mailto:me@maksonsab.ru " class="footer-content">Написать мне</a></p>
+            
+            <p><a href={{url_for('about_user', user='maksonsab')}} class="footer-content">Обо мне</a></p>
+        </div>
+    </footer>
 </body>
 </html>

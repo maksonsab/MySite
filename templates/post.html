@@ -26,16 +26,16 @@
     
 
     
-
-    <center>
-        <p>Дата создания: {{  data.creation_date.strftime('%d.%m.%Y') }} Просмотров: {{ data.viewes }} Рейтинг: <span class="rating">{{data.rating }}</span> <img src="/static/graphics/Arrow_up.svg" class="plus"></p>
-        <div class="content">
-            <h1>{{ data.title }}</h1>
-            <img src="{{data.post_image}}">
-            {{ data.content | safe}}
-            <p>Автор: {{ data.author_name}}</p>
-        </div>
-       
-    </center>
-
+    <div class="content-art">
+        <center>
+            <p>Дата создания: {{  data.creation_date.strftime('%d.%m.%Y') }} Просмотров: {{ data.viewes }} Рейтинг: <span class="rating">{{data.rating }}</span> <img src="/static/graphics/Arrow_up.svg" class="plus"></p>
+            <div class="content">
+                <h1>{{ data.title }}</h1>
+                <img src="{{data.post_image}}">
+                {{ data.content | safe}}
+                <p>Автор: <a href={{url_for('about_user', user = data.author.username) }}> {{data.author_name}}</a></p>
+            </div>
+        
+        </center>
+    </div>
 {% endblock %}

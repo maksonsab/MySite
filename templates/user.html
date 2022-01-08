@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% set header = True %}
+{% block title %} О пользователе | {{user.username}} {% endblock %} 
+
+{%  block content %}
+<h1> {{user.username}}</h1>
+{% if not user.avatar %}
+<img src="/static/graphics/no_avatar.png" width="100px">
+{% else %}
+
+<img src="{{user.avatar}}" width="100px">
+{%endif%}
+<p>Всего записей у пользователя: {{posts}} </p>
+
+{% endblock %}
