@@ -149,7 +149,7 @@ def upload_img():
         image = request.files['image-input']
         image_extension = image.filename.rsplit('.')[1]
         image.filename = random_name(image_extension)
-        image.save(path.join('./static/images/posts', image.filename))
+        image.save(path.join('./app/static/images/posts', image.filename))
         pim = '/image/posts/' + image.filename #path to image
         print('\n\n\nFILE OK!')
         response = make_response(json.dumps({'path':pim, 'name' : image.filename}), 200)
